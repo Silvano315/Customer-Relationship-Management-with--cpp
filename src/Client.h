@@ -30,12 +30,16 @@ public:
     //string company; oppure bool company;
 
     // I need a specific constructor with input by reference (more efficient and direct) so to also change original variable
-    Client(const string& _name, const string& _surname, const string& _phone, const string& _email, const string& _address, const string& _city){
+    Client(const string& _name, const string& _surname, const string& _phone, const string& _email, const string& _address, const string& _city);
 
-        // Here I need to implement interaction operations (add and view) and client operation (edit and view)
+    // Functions declaration:
+        // Here I need to implement interaction operations (add and view) 
 
-    };
-    ~Client();
+        // Functions for Client's operations
+    void edit_client_details(const string& _name, const string& _surname, const string& _phone, const string& _email, const string& _address, const string& _city);
+    void view_client_details() const;
+
+    //~Client();
 };
 
 #endif
