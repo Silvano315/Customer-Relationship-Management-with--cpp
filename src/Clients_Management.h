@@ -30,7 +30,7 @@ public:
     //Implement all methods to handle client's operations
 
     void add_client(const Client& _client);
-    void view_client() const;
+    void view_clients() const{};
 
     // the search methods has to return to Client object, I need a pointer because this allows to:
         // return nullptr for null result
