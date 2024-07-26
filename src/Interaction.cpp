@@ -10,6 +10,10 @@ Interaction::Interaction(const string& _type, const string& _date, const string&
     note = _note;
 }
 
+/*
+Need to implement method for adding interaction
+*/
+
 void Interaction::view_interaction_details () const{
 
     cout << "Interaction Type: " << type << endl;

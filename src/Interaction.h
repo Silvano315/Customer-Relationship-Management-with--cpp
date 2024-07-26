@@ -26,11 +26,8 @@ public:
     string note;
 
     // I need a specific constructor with input by reference (more efficient and direct) so to also change original variable
-    Interaction(const string& type, const string& date, const string& note);
+    Interaction(const string& _type, const string& _date, const string& _note);
 
-    // Functions declaration:
-        // Here I need to implement interaction operations (add and view) 
-        
     void view_interaction_details () const;
 
     //~Interaction();
