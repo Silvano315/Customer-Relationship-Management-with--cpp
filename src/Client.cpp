@@ -14,14 +14,21 @@ Client::Client(const string& _name, const string& _surname, const string& _phone
     city = _city;
 }
 
-/*
-I need to implement Interaction operations 
-*/
+// Interaction operations:
+void Client::add_interaction(const Interaction& _interaction){
+    interactions.push_back(_interaction);
+}
 
-
-// Client operations:
-    // Edit Client's details
+void Client::view_interaction() const{
+    for (const auto& interaction : interactions)
+    {
+        interaction.view_interaction_details();
+    }
     
+}
+
+
+// Client operations:    
 void Client::edit_client_details(const string& _name, const string& _surname, const string& _phone, const string& _email, const string& _address, const string& _city){
     name = _name;
     surname = _surname;
