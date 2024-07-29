@@ -45,6 +45,6 @@ void Client::view_client_details() const {
     cout << "Phone: " << phone << endl;
     cout << "Email: " << email << endl;
     cout << "Address: " << address << endl;
-    cout << "City: " << city << endl;
+    cout << "City: " << city << "\n" << endl;
 
 }

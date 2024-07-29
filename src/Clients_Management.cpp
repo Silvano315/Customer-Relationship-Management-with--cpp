@@ -52,7 +52,9 @@ void ClientsManagement::delete_client(const string& _name, const string& _surnam
     if (client != nullptr)
     {
         // I need to find the iterator or position for the element found before inside the clients vector
-        auto iterator = find_if(clients.begin(), clients.end(), *client);
+        auto iterator = find_if(clients.begin(), clients.end(), [&_name, &_surname](const Client& client){
+            return client.name == _name && client.surname == _surname;
+        });
         if (iterator != clients.end())
         {
             clients.erase(iterator);
@@ -84,28 +86,35 @@ void ClientsManagement::load_data(const string& _file_path){
 
     ifstream file(_file_path);
     string line;
+    Client* current_client = nullptr;
     // I take one line of the file at time
     while (getline(file, line)) {
         // I read the inputs inside the string line in ss
         istringstream ss(line);
         string name, surname, phone, email, address, city;
-        getline(ss, name, ',');
-        getline(ss, surname, ',');
-        getline(ss, phone, ',');
-        getline(ss, email, ',');
-        getline(ss, address, ',');
-        getline(ss, city, ',');
-        Client client(name, surname, phone, email, address, city);
-        
-        // do the same for each interaction about single client
-        while (getline(file, line) && !line.empty()) {
-            istringstream ss(line);
+        if (getline(ss, name, ',') &&
+            getline(ss, surname, ',') &&
+            getline(ss, phone, ',') &&
+            getline(ss, email, ',') &&
+            getline(ss, address, ',') &&
+            getline(ss, city, ','))
+        {
+            // new to handle clients dynamically
+            current_client = new Client(name, surname, phone, email, address, city);  
+            add_client(*current_client); 
+        } 
+        else if (current_client != nullptr)
+        {
+            ss.clear();
+            ss.str(line);
             string type, date, note;
-            getline(ss, type, ',');
-            getline(ss, date, ',');
-            getline(ss, note, ',');
-            client.add_interaction(Interaction(type, date, note));
+            if (getline(ss, type, ',') &&
+                getline(ss, date, ',') &&
+                getline(ss, note, ','))
+            {
+                current_client->add_interaction(Interaction(type, date, note));
+            }  
         }
-        add_client(client);
     }
+    file.close();
 }

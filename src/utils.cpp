@@ -6,23 +6,23 @@ using namespace std;
 
 // Function to show on interface the possible options to user 
 void show_menu(){
-
+    cout << "-----------------------------------" << endl;
     cout << "Client operations:\n" << endl;
     cout << "1. Add Client\n" << endl;
     cout << "2. View Clients\n" << endl;
     cout << "3. Edit Client\n" << endl;
     cout << "4. Delete Client\n" << endl;
     cout << "5. Search Client\n" << endl;
-
+    cout << "-----------------------------------" << endl;
     cout << "Interaction operations\n" << endl;
     cout << "6. Add Interaction\n" << endl;
     cout << "7. View Interaction\n" << endl;
-
+    cout << "-----------------------------------" << endl;
     cout << "Other operations\n" << endl;
     cout << "8. Save Data\n" << endl;
     cout << "9. Load Data\n" << endl;
     cout << "10. Exit\n" << endl;
-
+    cout << "-----------------------------------" << endl;
 }
 
 // Function to ask operation from user. Input will be saved to choice as int
@@ -33,8 +33,9 @@ void user_input(ClientsManagement& _management){
     do
     {
         show_menu();
-        cout << "Choose operation you need:\n" << endl;
+        cout << "Choose operation you need:" << endl;
         cin >> choice;
+        cout << "\n" << endl;
 
         switch (choice)
         {
@@ -58,7 +59,7 @@ void user_input(ClientsManagement& _management){
 
             _management.add_client(new_client);
 
-            cout << "Client added successfully!" << endl;
+            cout << "\nClient added successfully!\n" << endl;
             break;
         }
         case 2: {
@@ -73,6 +74,12 @@ void user_input(ClientsManagement& _management){
             cout << "Enter client's surname to edit: ";
             cin >> _surname;
 
+            Client* client = _management.search_client(_name, _surname);
+            if (client == nullptr)
+            {
+                //cerr << "Error: Client not found!\n" << endl;
+                throw runtime_error("Client not found!");
+            }
             string new_name, new_surname, new_phone, new_email, new_address, new_city;
             cout << "Enter new client's name to edit: ";
             cin >> new_name;
@@ -91,7 +98,7 @@ void user_input(ClientsManagement& _management){
 
             try {
                 _management.edit_client(_name, _surname, edited_client);
-                cout << "Client modified successfully!" << endl;
+                cout << "Client modified successfully!\n" << endl;
             } catch (const runtime_error& e) {
                 cout << "Erorr: " << e.what() << endl;
             }
@@ -105,7 +112,7 @@ void user_input(ClientsManagement& _management){
             cin >> _surname;
             try {
                 _management.delete_client(_name, _surname);
-                cout << "Client deleted successfully!" << endl;
+                cout << "Client deleted successfully!\n" << endl;
             } catch (const runtime_error& e) {
                 cout << "Error: " << e.what() << endl;
             }
@@ -119,7 +126,7 @@ void user_input(ClientsManagement& _management){
             cin >> _surname;
             try {
                 Client* client = _management.search_client(_name, _surname);
-                cout << "Client founded: \n" << endl;
+                cout << "\nClient founded: " << endl;
                 client->view_client_details();
             } catch (const runtime_error& e) {
                 cout << "Error: " << e.what() << endl;
@@ -135,7 +142,7 @@ void user_input(ClientsManagement& _management){
             try {
                 Client* client = _management.search_client(_name, _surname);
 
-                cout << "Client founded: \n" << endl;
+                cout << "Client founded!\n" << endl;
                 cout << "Enter interaction's type: ";
                 cin >> _type;
                 cout << "Enter interaction's date (format YYYY-MM-DD): ";
@@ -146,7 +153,7 @@ void user_input(ClientsManagement& _management){
                 Interaction _interaction(_type, _date, _note);
                 client->add_interaction(_interaction);
 
-                cout << "Interaction added successfully!" << endl;
+                cout << "Interaction added successfully!\n" << endl;
             } catch (const runtime_error& e) {
                 cout << "Error: " << e.what() << endl;
             }
@@ -168,22 +175,22 @@ void user_input(ClientsManagement& _management){
         }
         case 8: {
             _management.save_data("data/clients.csv");
-            cout << "Clients data saved successfully!" << endl;
+            cout << "Clients data saved successfully!\n" << endl;
             break;
         }
         case 9: {
             _management.load_data("data/clients.csv");
-            cout << "Clients data loaded successfully!" << endl;
+            cout << "Clients data loaded successfully!\n" << endl;
             break;
         }
         case 10: {
-            cout << "Exiting..." << endl;
+            cout << "Exiting...\n" << endl;
             break;
         }
-
-        default:
-            cout << "Warning: wrong choice. Insert a new correct value (1-10)." << endl;
+        default: {
+            cout << "Warning: wrong choice. Insert a new correct value (1-10).\n" << endl;
             break;
+        }
         }
     } while (choice != 10);
 }
