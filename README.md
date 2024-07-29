@@ -12,7 +12,10 @@
 
 This repository is the first project of the master's degree in AI Engineering with [Profession AI](https://profession.ai), all the credits for the requests and idea go to this team.
 
-InsuraPro Solutions is dedicated to improving the efficiency and quality of customer service for insurance companies by developing an advanced Customer Relationship Management (CRM) system that facilitates the management of customer information and their interactions with the company. Insurance businesses need a systematic, centralized way to manage customer information and track interactions. Many current systems are fragmented or non-user-friendly, hindering operational effectiveness and customer satisfaction. InsuraPro Solutions will offer an interactive console application developed in C++ that will allow users to manage customer information and their interactions efficiently and intuitively, thus improving customer service and internal management.
+InsuraPro Solutions is dedicated to improving the efficiency and quality of customer service for insurance companies by developing an advanced Customer Relationship Management (CRM) system that facilitates the management of customer information and their interactions with the company. Insurance businesses need a systematic, centralized way to manage customer information and track interactions. Many current systems are fragmented or non-user-friendly, hindering operational effectiveness and customer satisfaction. 
+
+Objective:
+- InsuraPro Solutions will offer an interactive console application developed in C++ that will allow users to manage customer information and their interactions efficiently and intuitively, thus improving customer service and internal management.
 
 In this project, I will implement:
 - **OOP in C++**: Implement OOP concepts for a robust and flexible structure.
@@ -44,4 +47,6 @@ Features to integrate:
 
 ## Requirements
 
-**TBD**
+’’’ bash
+g++ -std=c++11 -o my_program main.cpp Client.cpp Clients_Management.cpp Interaction.cpp utils.cpp
+’’’
