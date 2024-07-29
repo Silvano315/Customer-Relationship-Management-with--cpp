@@ -9,8 +9,8 @@ I used ifndef/endif and define.
 */
 
 
-#ifndef UTILS.H
-#define UTILS.H
+#ifndef UTILS_H
+#define UTILS_H
 
 #include "Clients_Management.h"
 
@@ -19,4 +19,4 @@ void show_menu();
 void user_input(ClientsManagement& _management);
 
 
-#endif
+#endif // UTILS_H

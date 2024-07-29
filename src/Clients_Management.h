@@ -10,8 +10,8 @@ I don't need constructor for this class because each element of the dynamic arra
 */
 
 
-#ifndef CLIENTSMANAGEMENT.H
-#define CLIENTSMANAGEMENT.H
+#ifndef CLIENTSMANAGEMENT_H
+#define CLIENTSMANAGEMENT_H
 
 #include "Client.h"
 #include <bits/stdc++.h>
@@ -30,7 +30,7 @@ public:
     //Implement all methods to handle client's operations
 
     void add_client(const Client& _client);
-    void view_clients() const{};
+    void view_clients() const;
 
     // the search methods has to return to Client object, I need a pointer because this allows to:
         // return nullptr for null result
@@ -44,4 +44,4 @@ public:
     void load_data(const string& file_path);
 };
 
-#endif
+#endif // CLIENTSMANAGEMENT_H
