@@ -16,15 +16,17 @@ Client::Client(const string& _name, const string& _surname, const string& _phone
 
 // Interaction operations:
 void Client::add_interaction(const Interaction& _interaction){
-    interactions.push_back(_interaction);
+    interactions.push_back( _interaction);
 }
 
 void Client::view_interaction() const{
+    int i = 1;
     for (const auto& interaction : interactions)
     {
+        cout << "Interaction " << i << ": " << endl;
         interaction.view_interaction_details();
+        i++;
     }
-    
 }
 
 

@@ -47,6 +47,22 @@ void ClientsManagement::edit_client(const string& _name, const string& _surname,
 }
 
 
+void ClientsManagement::search_interactions_by_type(const string& interaction_type) const {
+    for (const auto& client : clients) {
+        bool found = false;
+        for (const auto& interaction : client.interactions) {
+            if (interaction.type == interaction_type) {
+                if (!found) {
+                    cout << "Client: " << client.name << " " << client.surname << endl;
+                    found = true;
+                }
+                interaction.view_interaction_details();
+            }
+        }
+    }
+}
+
+
 void ClientsManagement::delete_client(const string& _name, const string& _surname){
     Client* client = search_client(_name, _surname);
     if (client != nullptr)
@@ -62,7 +78,7 @@ void ClientsManagement::delete_client(const string& _name, const string& _surnam
     }
     else
     {
-        throw runtime_error("Client not found!");
+        throw runtime_error("\nClient not found!");
     }
 }
 
@@ -91,29 +107,31 @@ void ClientsManagement::load_data(const string& _file_path){
     while (getline(file, line)) {
         // I read the inputs inside the string line in ss
         istringstream ss(line);
-        string name, surname, phone, email, address, city;
-        if (getline(ss, name, ',') &&
-            getline(ss, surname, ',') &&
-            getline(ss, phone, ',') &&
-            getline(ss, email, ',') &&
-            getline(ss, address, ',') &&
-            getline(ss, city, ','))
+        string field;
+        vector<string> fields;
+        while (getline(ss, field, ','))
         {
-            // new to handle clients dynamically
-            current_client = new Client(name, surname, phone, email, address, city);  
-            add_client(*current_client); 
-        } 
-        else if (current_client != nullptr)
+            fields.push_back(field);
+        }
+        if (fields.size() == 6)
         {
-            ss.clear();
-            ss.str(line);
-            string type, date, note;
-            if (getline(ss, type, ',') &&
-                getline(ss, date, ',') &&
-                getline(ss, note, ','))
-            {
-                current_client->add_interaction(Interaction(type, date, note));
-            }  
+            string name = fields[0];
+            string surname = fields[1];
+            string phone = fields[2];
+            string email = fields[3];
+            string address = fields[4];
+            string city = fields[5];
+            Client client(name, surname, phone, email, address, city);
+            add_client(client);
+            current_client = &clients.back();
+        } else if (fields.size() == 3 && current_client != nullptr)
+        {
+            string type = fields[0];
+            string date = fields[1];
+            string note = fields[2];
+            current_client->add_interaction(Interaction(type, date, note));
+        } else {
+            cout << "Unrecognized line format or no current client: " << line << endl;
         }
     }
     file.close();
