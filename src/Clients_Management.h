@@ -40,6 +40,7 @@ public:
     // have in mind, I don't want to modify  (it's like a temporary variable), but I will modify/update element in clients
     void edit_client(const string& _name, const string& _surname, const Client& modified_client); 
     void delete_client(const string& _name, const string& _surname);
+    void search_interactions_by_type(const string& interaction_type) const;
     void save_data(const string& file_path);
     void load_data(const string& file_path);
 };
