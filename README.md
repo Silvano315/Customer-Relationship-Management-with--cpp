@@ -47,6 +47,7 @@ Features to integrate:
 
 ## Requirements
 
-’’’ bash
+How to create the file .exe for this project [my_program](src/my_program):
+```bash
 g++ -std=c++11 -o my_program main.cpp Client.cpp Clients_Management.cpp Interaction.cpp utils.cpp
-’’’
+```
