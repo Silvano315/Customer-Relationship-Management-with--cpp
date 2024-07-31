@@ -4,8 +4,7 @@ Here, I define class Interaction and the operations about client's interacitons.
 Firstly, I need to prevent duplication about the inclusion of header file. I need this content to be included only once.
 I used ifndef/endif and define.
 
-
-
+In this file, I decleare variables and constructor for Interaction with view function
 */
 
 

@@ -4,8 +4,7 @@ Here, I define class Client and the operations about clients.
 Firstly, I need to prevent duplication about the inclusion of header file. I need this content to be included only once.
 I used ifndef/endif and define.
 
-
-
+In this file, I decleare variables and constructor for Client with functions to handle Client and Interaction operations.
 */
 
 
@@ -29,7 +28,7 @@ public:
     string address;
     string city;
     //string role;
-    //string company; oppure bool company;
+    //string company; or bool company;
 
     vector<Interaction> interactions;
 

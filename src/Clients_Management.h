@@ -6,7 +6,8 @@ I used ifndef/endif and define.
 
 I don't need constructor for this class because each element of the dynamic array clients receive the structure from Client.h
 
-
+In this file, I decleare private and public variables and methods. The functions have the purpose to handle clients and 
+interactions operations.
 */
 
 
@@ -32,13 +33,12 @@ public:
     void add_client(const Client& _client);
     void view_clients() const;
 
-    // the search methods has to return to Client object, I need a pointer because this allows to:
+    // the search methods has to return to Client vector, I need a pointer because this allows to:
         // return nullptr for null result
-        // avoid to copy entire Client object
-    Client* search_client(const string& _name, const string& _surname);
+        // avoid to copy entire Client vector
+    vector<Client*> search_client(const string& _name, const string& _surname);
 
-    // have in mind, I don't want to modify  (it's like a temporary variable), but I will modify/update element in clients
-    void edit_client(const string& _name, const string& _surname, const Client& modified_client); 
+    void edit_client(const string& _name, const string& _surname); 
     void delete_client(const string& _name, const string& _surname);
     void search_interactions_by_type(const string& interaction_type) const;
     void save_data(const string& file_path);
