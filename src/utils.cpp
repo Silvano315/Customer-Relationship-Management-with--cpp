@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "Validation_utils.h"
 #include <iostream>
 #include <string>
 #include <bits/stdc++.h>
@@ -46,12 +47,29 @@ void user_input(ClientsManagement& _management){
             cout << "Enter client's name: " << endl;
             cin.ignore();
             getline(cin, _name);
+            while (!validate_string(_name))
+            {
+                cout << "Invalid name. Please re-enter:" << endl;
+                getline(cin, _name);
+            }
             cout << "Enter client's surname: " << endl;
             getline(cin, _surname);
+            while (!validate_string(_surname)) {
+                cout << "Invalid surname. Please re-enter: " << endl;
+                getline(cin, _surname);
+            }
             cout << "Enter client's phone: " << endl;
             getline(cin, _phone);
+            while (!validate_phone(_phone)) {
+                cout << "Invalid phone. Please re-enter: " << endl;
+                getline(cin, _phone);
+            }
             cout << "Enter client's email: " << endl;
             getline(cin, _email);
+                while (!validate_email(_email)) {
+                cout << "Invalid email. Please re-enter: " << endl;
+                getline(cin, _email);
+            }
             cout << "Enter client's address: " << endl;
             getline(cin, _address);
             cout << "Enter client's city: " << endl;
@@ -75,67 +93,11 @@ void user_input(ClientsManagement& _management){
             getline(cin, _name);
             cout << "Enter client's surname to edit: " << endl;
             getline(cin, _surname);
-
-            Client* client = _management.search_client(_name, _surname);
-            if (client != nullptr)
-            {
-                string new_name = client->name;
-                string new_surname = client->surname;
-                string new_phone = client->phone;
-                string new_email = client->email;
-                string new_address = client->address;
-                string new_city = client->city;
-                string input;
-
-                cout << "Current name: " << client->name << ". Do you want to change it? (y/n): ";
-                getline(cin, input);
-                if (input == "y" || input == "Y") {
-                    cout << "Enter new name: ";
-                    getline(cin, new_name);
-                }
-                cout << "Current surname: " << client->surname << ". Do you want to change it? (y/n): ";
-                getline(cin, input);
-                if (input == "y" || input == "Y") {
-                    cout << "Enter new surname: ";
-                    getline(cin, new_surname);
-                }
-                cout << "Current phone: " << client->phone << ". Do you want to change it? (y/n): ";
-                getline(cin, input);
-                if (input == "y" || input == "Y") {
-                    cout << "Enter new phone: ";
-                    getline(cin, new_phone);
-                }
-                cout << "Current email: " << client->email << ". Do you want to change it? (y/n): ";
-                getline(cin, input);
-                if (input == "y" || input == "Y") {
-                    cout << "Enter new email: ";
-                    getline(cin, new_email);
-                }
-                cout << "Current address: " << client->address << ". Do you want to change it? (y/n): ";
-                getline(cin, input);
-                if (input == "y" || input == "Y") {
-                    cout << "Enter new address: ";
-                    getline(cin, new_address);
-                }
-                cout << "Current city: " << client->city << ". Do you want to change it? (y/n): ";
-                getline(cin, input);
-                if (input == "y" || input == "Y") {
-                    cout << "Enter new city: ";
-                    getline(cin, new_city);
-                }
-
-                Client edited_client(new_name, new_surname, new_phone, new_email, new_address, new_city);
-
-                for (const auto& interaction : client->interactions)
-                {
-                    edited_client.add_interaction(interaction);
-                }
-                
-                _management.edit_client(_name, _surname, edited_client);
+            try {
+                _management.edit_client(_name, _surname);
                 cout << "Client modified successfully!\n" << endl;
-            } else
-            {
-                cout << "Error: Client not found!\n" << endl;
+            } catch (const runtime_error& e) {
+                cout << "Error: " << e.what() << endl;
             }
             break;
         }
@@ -162,17 +124,25 @@ void user_input(ClientsManagement& _management){
             cout << "Enter client's surname to view: " << endl;
             getline(cin, _surname);
 
-            Client* client = _management.search_client(_name, _surname);
-            if (client != nullptr)
-            {
-                cout << "\nClient found!\n" << endl;
-                client->view_client_details();
-                //cout << "\nClient interactions:\n" << endl;
-                //client->view_interaction();
-            } else
-            {
-                cout << "\nError: Client not found!" << endl;
+            vector<Client*> clients_to_view = _management.search_client(_name, _surname);
+            if (clients_to_view.empty()) {
+                cout << "Error: Client not found!" << endl;
+                break;
             }
+            Client* client = nullptr;
+            if (clients_to_view.size() > 1) {
+                client = handle_client_selection(clients_to_view);
+                if (client == nullptr) {
+                    cout << "No valid client selected. Aborting view operation." << endl;
+                    break;
+                }
+            } else {
+                client = clients_to_view.front();
+            }
+            cout << "\nClient found!\n" << endl;
+            client->view_client_details();
+            //cout << "\nClient interactions:\n" << endl;
+            //client->view_interaction();
             break;
         }
         case 6: {
@@ -182,42 +152,72 @@ void user_input(ClientsManagement& _management){
             getline(cin, _name);
             cout << "Enter client's surname to add interaction: " << endl;
             getline(cin, _surname);
-            Client* client = _management.search_client(_name, _surname);
-            if (client != nullptr)
-            {
-                cout << "Client found!\n" << endl;
+            vector<Client*> clients_to_edit = _management.search_client(_name, _surname);
+            if (clients_to_edit.empty()) {
+                cout << "Error: Client not found!" << endl;
+                break;
+            }
+            Client* client = nullptr;
+            if (clients_to_edit.size() > 1) {
+                client = handle_client_selection(clients_to_edit);
+                if (client == nullptr) {
+                    cout << "No valid client selected. Aborting interaction addition." << endl;
+                    break;
+                }
+            } else {
+                client = clients_to_edit.front();
+            }
+
+            cout << "Client found!\n" << endl;
+            do {
                 cout << "Enter interaction's type: " << endl;
                 getline(cin, _type);
+                if (_type.empty()) {
+                    cout << "Interaction type cannot be empty. Please enter a valid type." << endl;
+                }
+            } while (_type.empty());
+
+            do {
                 cout << "Enter interaction's date (format YYYY-MM-DD): " << endl;
                 getline(cin, _date);
-                cout << "Enter a note: " << endl;
-                getline(cin, _note);
+                if (!validate_date(_date)) {
+                    cout << "Invalid date format. Please enter a date in the format YYYY-MM-DD." << endl;
+                }
+            } while (!validate_date(_date));
 
-                Interaction _interaction(_type, _date, _note);
-                client->add_interaction(_interaction);
+            cout << "Enter a note: " << endl;
+            getline(cin, _note);
 
-                cout << "Interaction added successfully!\n" << endl;
-            } else
-            {
-                cout << "Error: Client not found!" << endl;
-            }  
+            Interaction _interaction(_type, _date, _note);
+            client->add_interaction(_interaction);
+
+            cout << "Interaction added successfully!\n" << endl;
             break;
         }
         case 7: {
-            string _name, _surname, _type, _date, _note;
+            string _name, _surname;
             cout << "Enter client's name to view interaction: " << endl;
             cin.ignore();
             getline(cin, _name);
             cout << "Enter client's surname to view interaction: " << endl;
             getline(cin, _surname);
-            Client* client = _management.search_client(_name, _surname);
-            if (client != nullptr)
-            {
-                client->view_interaction();
-            } else
-            {
+            vector<Client*> clients_to_view = _management.search_client(_name, _surname);
+            if (clients_to_view.empty()) {
                 cout << "Error: Client not found!" << endl;
+                break;
             }
+            Client* client = nullptr;
+            if (clients_to_view.size() > 1) {
+                client = handle_client_selection(clients_to_view);
+                if (client == nullptr) {
+                    cout << "No valid client selected. Aborting view interactions operation." << endl;
+                    break;
+                }
+            } else {
+                client = clients_to_view.front();
+            }
+            
+            client->view_interaction();
             break;
         }
         case 8: {
@@ -248,4 +248,31 @@ void user_input(ClientsManagement& _management){
         }
         }
     } while (choice != 11);
+}
+
+
+// Funtion to handle the case in which there are multiple clients with the same name and surname.
+Client* handle_client_selection(const std::vector<Client*>& clients) {
+    if (clients.empty()) {
+        cout << "No clients found." << endl;
+        return nullptr;
+    }
+
+    cout << "\nThere are multiple clients with this name and surname:" << endl;
+    for (size_t i = 0; i < clients.size(); ++i) {
+        cout << "Client " << i + 1 << ":" << std::endl;
+        clients[i]->view_client_details();
+    }
+
+    size_t choice;
+    cout << "Enter the number of the client you want to select: " << endl;
+    cin >> choice;
+    cin.ignore();  
+
+    if (choice > 0 && choice <= clients.size()) {
+        return clients[choice - 1];
+    } else {
+        cout << "Invalid choice." << endl;
+        return nullptr;
+    }
 }

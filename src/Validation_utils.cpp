@@ -14,3 +14,8 @@ bool validate_email(const string& email) {
     const regex pattern(R"((\w+)(\.{1}\w+)*@(\w+)(\.(\w+))+)");
     return regex_match(email, pattern);
 }
+
+bool validate_date(const string& date) {
+    const regex pattern(R"(^\d{4}-\d{2}-\d{2}$)");
+    return regex_match(date, pattern);
+}
